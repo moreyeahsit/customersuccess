@@ -14,6 +14,7 @@ function encodeSharingUrl(shareUrl: string): string {
 async function graphFetch(path: string, accessToken: string): Promise<Response> {
   const res = await fetch(`${GRAPH_BASE}${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
+    cache: 'no-store',
   })
   if (!res.ok) {
     const body = await res.text().catch(() => '')
@@ -45,7 +46,7 @@ export async function downloadSharedWorkbook(shareUrl: string, accessToken: stri
   const { '@microsoft.graph.downloadUrl': downloadUrl } = (await withDownloadUrl.json()) as DriveItemResponse
 
   if (downloadUrl) {
-    const fileRes = await fetch(downloadUrl)
+    const fileRes = await fetch(downloadUrl, { cache: 'no-store' })
     if (fileRes.ok) return fileRes.arrayBuffer()
   }
 
