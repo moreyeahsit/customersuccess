@@ -64,10 +64,12 @@ This is a configuration step in your Microsoft 365 admin center, not a deployed 
    - **Application (client) ID** → `VITE_MSAL_CLIENT_ID`
    - **Directory (tenant) ID** → `VITE_MSAL_TENANT_ID`
 6. Go to **API permissions** → **Add a permission** → **Microsoft Graph** →
-   **Delegated permissions** → search `Files.Read` → check it → **Add permissions**.
+   **Delegated permissions** → add both `Files.Read.All` and `Sites.Read.All` → **Add
+   permissions**. (`Files.Read` alone isn't enough for files living in a SharePoint team
+   site's document library rather than personal OneDrive — it silently returns
+   `accessDenied` even when the signed-in user genuinely has access to the file.)
 7. Click **Grant admin consent for `<your org>`** so users aren't individually prompted
-   for admin approval (regular users can still consent to this specific low-privilege
-   permission themselves even without this step, but pre-granting is smoother).
+   for admin approval.
 8. Under **Authentication**, leave the "Access tokens" / "ID tokens" (implicit flow)
    checkboxes **unchecked** — this app uses the modern auth-code + PKCE flow, which
    doesn't need them.
@@ -84,8 +86,8 @@ VITE_EXCEL_SHARE_URL=<sharing link from step 1>
 
 Run `npm run dev` and open the app — you should see a "Sign in with Microsoft" screen
 instead of the app shell. Sign in with a Microsoft 365 account that has access to the
-file. First-time sign-in will show a one-time consent screen for the `Files.Read`
-permission.
+file. First-time sign-in will show a one-time consent screen for the `Files.Read.All`
+and `Sites.Read.All` permissions.
 
 ## 4. Deploying it somewhere real
 

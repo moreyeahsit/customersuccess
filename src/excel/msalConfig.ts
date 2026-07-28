@@ -7,7 +7,10 @@ export const EXCEL_SHARE_URL = import.meta.env.VITE_EXCEL_SHARE_URL
 /** True once all three required env vars are set — gates whether the app runs in "live" or "local sample data" mode. */
 export const LIVE_DATA_CONFIGURED = Boolean(MSAL_CLIENT_ID && MSAL_TENANT_ID && EXCEL_SHARE_URL)
 
-export const GRAPH_SCOPES = ['Files.Read']
+// Files.Read alone often isn't enough for files living in a SharePoint team
+// site's document library (vs. personal OneDrive or an individually-shared
+// file) — Files.Read.All and Sites.Read.All cover that case.
+export const GRAPH_SCOPES = ['Files.Read.All', 'Sites.Read.All']
 
 const redirectBase = (import.meta.env.VITE_MSAL_REDIRECT_URI ?? window.location.origin).replace(/\/$/, '')
 
