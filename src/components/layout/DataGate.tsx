@@ -42,7 +42,10 @@ function SplitShell({ children }: { children: ReactNode }) {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white/15">
             <Sparkles className="h-4.5 w-4.5" />
           </div>
-          <span className="text-lg font-semibold">Vantage</span>
+          <div className="leading-tight">
+            <div className="text-lg font-semibold">Vantage</div>
+            <div className="text-xs text-white/60">by Moreyeahs</div>
+          </div>
         </div>
 
         <div className="relative">
@@ -63,7 +66,7 @@ function SplitShell({ children }: { children: ReactNode }) {
           </ul>
         </div>
 
-        <div className="relative text-xs text-white/50">Vantage Platform · v1.0 PRD</div>
+        <div className="relative text-xs text-white/50">Moreyeahs · Vantage Platform · v1.0 PRD</div>
       </div>
 
       <div className="flex flex-1 items-center justify-center p-6">
@@ -79,7 +82,10 @@ function MobileBrand() {
       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white">
         <Sparkles className="h-4.5 w-4.5" />
       </div>
-      <span className="text-base font-semibold text-slate-800">Vantage</span>
+      <div className="text-left leading-tight">
+        <div className="text-base font-semibold text-slate-800">Vantage</div>
+        <div className="text-[11px] text-slate-400">by Moreyeahs</div>
+      </div>
     </div>
   )
 }
