@@ -4,11 +4,23 @@ import { msalConfig, LIVE_DATA_CONFIGURED } from './msalConfig'
 /** Only constructed when Azure AD env vars are present — see .env.example. */
 export const msalInstance = LIVE_DATA_CONFIGURED ? new PublicClientApplication(msalConfig) : null
 
-let initPromise: Promise<void> | null = null
+let readyPromise: Promise<void> | null = null
 
-/** Safe to call repeatedly — MSAL requires this before any other API call. */
-export function ensureMsalInitialized(): Promise<void> {
+/**
+ * Safe to call repeatedly — initializes MSAL and, on the page load that
+ * follows a loginRedirect()/acquireTokenRedirect() round-trip, processes the
+ * response so the resulting account lands in the cache before the app
+ * decides what to render.
+ */
+export function ensureMsalReady(): Promise<void> {
   if (!msalInstance) return Promise.resolve()
-  if (!initPromise) initPromise = msalInstance.initialize()
-  return initPromise
+  if (!readyPromise) {
+    readyPromise = msalInstance
+      .initialize()
+      .then(() => msalInstance!.handleRedirectPromise())
+      .then((result) => {
+        if (result?.account) msalInstance!.setActiveAccount(result.account)
+      })
+  }
+  return readyPromise
 }

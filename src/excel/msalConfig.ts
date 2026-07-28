@@ -15,11 +15,11 @@ export const msalConfig: Configuration = {
   auth: {
     clientId: MSAL_CLIENT_ID ?? '',
     authority: `https://login.microsoftonline.com/${MSAL_TENANT_ID ?? 'common'}`,
-    // Popup/silent flows load this URL in a transient window — keep it a blank
-    // static page (public/auth-redirect.html) so the app never re-mounts there.
-    // Pointing this at the app's own root causes MSAL's "block_nested_popups"
-    // error once the app's own auth logic boots inside the popup itself.
-    redirectUri: `${redirectBase}/auth-redirect.html`,
+    // Sign-in uses the full-page redirect flow (not popups) — popups are
+    // fragile against modern browsers' cross-origin-opener-policy enforcement,
+    // which can sever the popup↔opener link and leave MSAL's "interaction in
+    // progress" lock stuck forever. Redirect just navigates back here directly.
+    redirectUri: redirectBase,
   },
   cache: {
     cacheLocation: 'localStorage',

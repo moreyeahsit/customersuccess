@@ -56,11 +56,10 @@ This is a configuration step in your Microsoft 365 admin center, not a deployed 
 3. **Supported account types**: "Accounts in this organizational directory only" (single
    tenant) — this is an internal tool.
 4. **Redirect URI**: platform = **Single-page application (SPA)**, value =
-   `http://localhost:5174/auth-redirect.html` for local development. Note the
-   `/auth-redirect.html` suffix — it must point at that blank page, not the app's root
-   URL, or sign-in will fail with a `block_nested_popups` error. Add your production
-   URL's equivalent (`https://your-domain/auth-redirect.html`) too once you've deployed
-   (see step 4) — you can add multiple redirect URIs later under **Authentication**.
+   `http://localhost:5174` for local development (just the base URL — sign-in uses a
+   full-page redirect, so it lands back on the app itself, not a separate page). Add
+   your production URL too once you've deployed (see step 4) — you can add multiple
+   redirect URIs later under **Authentication**.
 5. Click **Register**. On the **Overview** page, copy:
    - **Application (client) ID** → `VITE_MSAL_CLIENT_ID`
    - **Directory (tenant) ID** → `VITE_MSAL_TENANT_ID`
@@ -102,9 +101,9 @@ request time. That means:
 
 Any static file host works — there's still no backend/middleware, just files being
 served (a SharePoint site page, Azure Static Web Apps' free tier, Netlify, GitHub Pages,
-an internal IIS/nginx box serving static files, etc.). Whatever URL you land on, add
-`<that-url>/auth-redirect.html` as an additional Redirect URI (platform: Single-page
-application) on the Azure AD app from step 2.
+an internal IIS/nginx box serving static files, etc.). Whatever URL you land on, add it
+as an additional Redirect URI (platform: Single-page application) on the Azure AD app
+from step 2.
 
 ## 5. Keeping data fresh
 
@@ -121,5 +120,6 @@ application) on the Azure AD app from step 2.
   access to the file. Check the SharePoint/OneDrive sharing settings.
 - **"...missing required sheet(s)..."** — a tab was renamed or deleted. Compare against
   the ReadMe tab's sheet list and restore the exact names.
-- **Stuck on "Signing in..." / popup blocked** — some browsers block the sign-in popup on
-  first load; allow popups for the app's domain and retry.
+- **`interaction_in_progress`** — a previous sign-in attempt didn't finish cleanly and
+  left a stale lock behind. Clear the site's storage (DevTools → Application → Storage
+  → "Clear site data", or just use a fresh/incognito window) and try again.

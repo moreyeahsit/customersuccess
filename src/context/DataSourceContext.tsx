@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import { MsalProvider, useMsal } from '@azure/msal-react'
 import { InteractionRequiredAuthError } from '@azure/msal-browser'
 import { LIVE_DATA_CONFIGURED, EXCEL_SHARE_URL, GRAPH_SCOPES } from '@/excel/msalConfig'
-import { msalInstance, ensureMsalInitialized } from '@/excel/msalInstance'
+import { msalInstance, ensureMsalReady } from '@/excel/msalInstance'
 import { downloadSharedWorkbook } from '@/excel/graphDownload'
 import { parseWorkbook } from '@/excel/parseWorkbook'
 import { applyParsedData } from '@/excel/liveData'
@@ -48,12 +48,27 @@ function LocalDataSourceProvider({ children }: { children: ReactNode }) {
 
 function LiveDataSourceProvider({ children }: { children: ReactNode }) {
   const { instance, accounts } = useMsal()
-  const [status, setStatus] = useState<DataSourceStatus>('signed-out')
+  // Sign-in uses a full-page redirect (see msalConfig.ts) — until the app has
+  // processed a possible pending redirect response on this load, we don't yet
+  // know the real auth state, so treat it as loading rather than flashing
+  // "signed-out" incorrectly.
+  const [msalReady, setMsalReady] = useState(false)
+  const [status, setStatus] = useState<DataSourceStatus>('loading')
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [lastSynced, setLastSynced] = useState<Date | null>(null)
   const [dataVersion, setDataVersion] = useState(0)
   const hasAccount = accounts.length > 0
   const refreshingRef = useRef(false)
+
+  useEffect(() => {
+    ensureMsalReady()
+      .then(() => setMsalReady(true))
+      .catch((err) => {
+        setStatus('error')
+        setErrorMessage(err instanceof Error ? err.message : String(err))
+        setMsalReady(true)
+      })
+  }, [])
 
   const refresh = useCallback(async () => {
     if (refreshingRef.current) return
@@ -65,17 +80,18 @@ function LiveDataSourceProvider({ children }: { children: ReactNode }) {
     setStatus('loading')
     setErrorMessage(null)
     try {
-      await ensureMsalInitialized()
       const account = accounts[0]
       let token
       try {
         token = await instance.acquireTokenSilent({ scopes: GRAPH_SCOPES, account })
       } catch (err) {
         if (err instanceof InteractionRequiredAuthError) {
-          token = await instance.acquireTokenPopup({ scopes: GRAPH_SCOPES, account })
-        } else {
-          throw err
+          // Navigates away — execution picks back up via ensureMsalReady()
+          // processing the redirect response on the next page load.
+          await instance.acquireTokenRedirect({ scopes: GRAPH_SCOPES, account })
+          return
         }
+        throw err
       }
       const buffer = await downloadSharedWorkbook(EXCEL_SHARE_URL!, token.accessToken)
       const parsed = parseWorkbook(buffer)
@@ -94,8 +110,8 @@ function LiveDataSourceProvider({ children }: { children: ReactNode }) {
   const signIn = useCallback(async () => {
     setErrorMessage(null)
     try {
-      await ensureMsalInitialized()
-      await instance.loginPopup({ scopes: GRAPH_SCOPES })
+      await ensureMsalReady()
+      await instance.loginRedirect({ scopes: GRAPH_SCOPES })
     } catch (err) {
       setStatus('error')
       setErrorMessage(err instanceof Error ? err.message : String(err))
@@ -103,14 +119,15 @@ function LiveDataSourceProvider({ children }: { children: ReactNode }) {
   }, [instance])
 
   const signOut = useCallback(() => {
-    instance.logoutPopup().catch(() => {})
+    instance.logoutRedirect().catch(() => {})
   }, [instance])
 
   useEffect(() => {
+    if (!msalReady) return
     if (hasAccount) refresh()
     else setStatus('signed-out')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasAccount])
+  }, [msalReady, hasAccount])
 
   useEffect(() => {
     if (!hasAccount) return
@@ -120,7 +137,7 @@ function LiveDataSourceProvider({ children }: { children: ReactNode }) {
 
   const value: DataSourceContextValue = {
     configured: true,
-    status,
+    status: msalReady ? status : 'loading',
     errorMessage,
     lastSynced,
     dataVersion,
