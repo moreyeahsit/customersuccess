@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+
+  --color-navy-950: #0b0e1f;
+  --color-navy-900: #12152b;
+  --color-navy-800: #1a1e38;
+  --color-navy-700: #232847;
+
+  --color-brand-50: #eef1ff;
+  --color-brand-100: #e0e4ff;
+  --color-brand-500: #5b5fe8;
+  --color-brand-600: #4a4dd6;
+  --color-brand-700: #3d3fb0;
+
+  --color-good-50: #ecfdf3;
+  --color-good-100: #d1fadf;
+  --color-good-300: #6ce9a6;
+  --color-good-500: #12b76a;
+  --color-good-700: #027a48;
+
+  --color-warn-50: #fffaeb;
+  --color-warn-100: #fef0c7;
+  --color-warn-300: #fec84b;
+  --color-warn-500: #f79009;
+  --color-warn-700: #b54708;
+
+  --color-bad-50: #fef3f2;
+  --color-bad-100: #fee4e2;
+  --color-bad-300: #fca5a5;
+  --color-bad-500: #f04438;
+  --color-bad-700: #b42318;
+}
+
+:root {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #f4f5fa;
+  color: #1a1e38;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d3d6e6;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

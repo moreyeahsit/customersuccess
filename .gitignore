@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+.env
+.env.*
+!.env.example
+
+# Superseded by excel-template/Vantage_Data.xlsx; left in place because it's
+# locked open in Excel. Delete it manually once closed.
+excel-template/QuikitCS_Data.xlsx
+# Excel lock files
+excel-template/~$*.xlsx
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
