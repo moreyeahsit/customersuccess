@@ -167,7 +167,7 @@ function OverviewTab({
 
       <Card className="flex flex-col items-center justify-center gap-2 text-center">
         <span className="text-xs font-medium text-slate-500">Customer Readiness Index</span>
-        <ProgressRing value={customer.readinessScore} color="#5b5fe8" />
+        <ProgressRing value={customer.readinessScore} color="#ec4899" />
         <Pill tone="brand">
           Level {level} · {READINESS_LEVELS[level].name}
         </Pill>
@@ -322,15 +322,15 @@ function FinancialsTab({ customer }: { customer: NonNullable<ReturnType<typeof g
             <AreaChart data={trend}>
               <defs>
                 <linearGradient id="marginGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#5b5fe8" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="#5b5fe8" stopOpacity={0} />
+                  <stop offset="0%" stopColor="#ec4899" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="#ec4899" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef0f5" />
               <XAxis dataKey="period" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => formatINR(v)} width={70} />
               <Tooltip formatter={(v) => formatINR(Number(v))} />
-              <Area type="monotone" dataKey="netMargin" name="Net Margin" stroke="#5b5fe8" fill="url(#marginGradient)" strokeWidth={2} />
+              <Area type="monotone" dataKey="netMargin" name="Net Margin" stroke="#ec4899" fill="url(#marginGradient)" strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
         </div>
@@ -424,7 +424,7 @@ function LtvTab({ customer }: { customer: NonNullable<ReturnType<typeof getCusto
               <XAxis dataKey="period" tick={{ fontSize: 12 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 12 }} axisLine={false} tickLine={false} tickFormatter={(v) => formatINR(v)} width={70} />
               <Tooltip formatter={(v) => formatINR(Number(v))} />
-              <Bar dataKey="value" name="Predicted LTV" fill="#5b5fe8" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="value" name="Predicted LTV" fill="#ec4899" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

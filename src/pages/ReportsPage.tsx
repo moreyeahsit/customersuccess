@@ -114,7 +114,7 @@ export function ReportsPage() {
                 <Tooltip formatter={(v) => `${Number(v).toFixed(1)}%`} />
                 <Bar dataKey="marginPct" name="Net Margin" radius={[4, 4, 0, 0]}>
                   {marginData.map((d) => (
-                    <Cell key={d.name} fill={d.marginPct < 0 ? '#e0483e' : '#5b5fe8'} />
+                    <Cell key={d.name} fill={d.marginPct < 0 ? '#e0483e' : '#ec4899'} />
                   ))}
                 </Bar>
               </BarChart>

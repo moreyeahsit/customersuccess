@@ -15,6 +15,7 @@ import { CustomerJourneyPage } from '@/pages/CustomerJourneyPage'
 import { TestimonialsPage } from '@/pages/TestimonialsPage'
 import { QbrPage } from '@/pages/QbrPage'
 import { ReportsPage } from '@/pages/ReportsPage'
+import { FinancialPivotPage } from '@/pages/FinancialPivotPage'
 import { AiCopilotPage } from '@/pages/AiCopilotPage'
 import { AdministrationPage } from '@/pages/AdministrationPage'
 
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/testimonials" element={<TestimonialsPage />} />
                   <Route path="/qbr" element={<QbrPage />} />
                   <Route path="/reports" element={<ReportsPage />} />
+                  <Route path="/financial-pivot" element={<FinancialPivotPage />} />
                   <Route path="/copilot" element={<AiCopilotPage />} />
                   <Route path="/admin" element={<AdministrationPage />} />
                 </Route>

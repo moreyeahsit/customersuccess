@@ -33,6 +33,7 @@ export function ExecutiveDashboardPage() {
 
   return (
     <div>
+      <p className="mb-1 text-sm font-semibold text-brand-600">Welcome back, Shifaan</p>
       <PageHeader
         title="Executive Dashboard"
         subtitle="Portfolio-wide view across retention, expansion, and profitability"

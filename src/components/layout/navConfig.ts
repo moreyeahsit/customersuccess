@@ -9,6 +9,7 @@ import {
   MessageSquareQuote,
   Presentation,
   BarChart3,
+  Table2,
   Sparkles,
   Settings,
   type LucideIcon,
@@ -31,6 +32,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Testimonials', path: '/testimonials', icon: MessageSquareQuote },
   { label: 'QBR', path: '/qbr', icon: Presentation },
   { label: 'Reports', path: '/reports', icon: BarChart3 },
+  { label: 'Pivot Report', path: '/financial-pivot', icon: Table2 },
   { label: 'AI Copilot', path: '/copilot', icon: Sparkles },
   { label: 'Administration', path: '/admin', icon: Settings },
 ]
