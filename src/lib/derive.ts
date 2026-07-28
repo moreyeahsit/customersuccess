@@ -21,10 +21,28 @@ export function getReadinessLevel(score: number): ReadinessLevel {
   return 6
 }
 
-export function sumFinancials(f: FinancialPeriod) {
-  const revenue = f.recurringRevenue + f.projectRevenue + f.cloudRevenue + f.supportRevenue
-  const deliveryCosts = f.developerCost + f.deliveryCost + f.supportCost + f.infrastructureCost + f.travelCost
-  const overheadCosts = f.salesCost + f.successCost + f.cloudCost
+/** A row-less customer (e.g. one added to the Customers sheet without a matching Financials row) falls back to this. */
+export const EMPTY_FINANCIAL_PERIOD: FinancialPeriod = {
+  period: '—',
+  recurringRevenue: 0,
+  projectRevenue: 0,
+  cloudRevenue: 0,
+  supportRevenue: 0,
+  developerCost: 0,
+  deliveryCost: 0,
+  supportCost: 0,
+  infrastructureCost: 0,
+  travelCost: 0,
+  salesCost: 0,
+  successCost: 0,
+  cloudCost: 0,
+}
+
+export function sumFinancials(f: FinancialPeriod | undefined) {
+  const period = f ?? EMPTY_FINANCIAL_PERIOD
+  const revenue = period.recurringRevenue + period.projectRevenue + period.cloudRevenue + period.supportRevenue
+  const deliveryCosts = period.developerCost + period.deliveryCost + period.supportCost + period.infrastructureCost + period.travelCost
+  const overheadCosts = period.salesCost + period.successCost + period.cloudCost
   const cost = deliveryCosts + overheadCosts
   const grossMargin = revenue - deliveryCosts
   const netMargin = grossMargin - overheadCosts
@@ -32,8 +50,8 @@ export function sumFinancials(f: FinancialPeriod) {
   return { revenue, cost, deliveryCosts, overheadCosts, grossMargin, netMargin, marginPct }
 }
 
-export function latestFinancials(c: Customer) {
-  return c.financials[c.financials.length - 1]
+export function latestFinancials(c: Customer): FinancialPeriod {
+  return c.financials[c.financials.length - 1] ?? EMPTY_FINANCIAL_PERIOD
 }
 
 export function daysUntil(dateStr: string): number {

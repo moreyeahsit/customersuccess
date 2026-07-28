@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { RoleProvider } from '@/context/RoleContext'
 import { DataSourceProvider } from '@/context/DataSourceContext'
 import { DataGate } from '@/components/layout/DataGate'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { AppLayout } from '@/components/layout/AppLayout'
 import { ExecutiveDashboardPage } from '@/pages/ExecutiveDashboardPage'
 import { CustomersPage } from '@/pages/CustomersPage'
@@ -19,31 +20,33 @@ import { AdministrationPage } from '@/pages/AdministrationPage'
 
 function App() {
   return (
-    <DataSourceProvider>
-      <DataGate>
-        <RoleProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<AppLayout />}>
-                <Route path="/" element={<ExecutiveDashboardPage />} />
-                <Route path="/customers" element={<CustomersPage />} />
-                <Route path="/customers/:id" element={<Customer360Page />} />
-                <Route path="/tasks" element={<TasksPage />} />
-                <Route path="/playbooks" element={<PlaybooksPage />} />
-                <Route path="/renewals" element={<RenewalsPage />} />
-                <Route path="/health-center" element={<HealthCenterPage />} />
-                <Route path="/journey" element={<CustomerJourneyPage />} />
-                <Route path="/testimonials" element={<TestimonialsPage />} />
-                <Route path="/qbr" element={<QbrPage />} />
-                <Route path="/reports" element={<ReportsPage />} />
-                <Route path="/copilot" element={<AiCopilotPage />} />
-                <Route path="/admin" element={<AdministrationPage />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </RoleProvider>
-      </DataGate>
-    </DataSourceProvider>
+    <ErrorBoundary>
+      <DataSourceProvider>
+        <DataGate>
+          <RoleProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<AppLayout />}>
+                  <Route path="/" element={<ExecutiveDashboardPage />} />
+                  <Route path="/customers" element={<CustomersPage />} />
+                  <Route path="/customers/:id" element={<Customer360Page />} />
+                  <Route path="/tasks" element={<TasksPage />} />
+                  <Route path="/playbooks" element={<PlaybooksPage />} />
+                  <Route path="/renewals" element={<RenewalsPage />} />
+                  <Route path="/health-center" element={<HealthCenterPage />} />
+                  <Route path="/journey" element={<CustomerJourneyPage />} />
+                  <Route path="/testimonials" element={<TestimonialsPage />} />
+                  <Route path="/qbr" element={<QbrPage />} />
+                  <Route path="/reports" element={<ReportsPage />} />
+                  <Route path="/copilot" element={<AiCopilotPage />} />
+                  <Route path="/admin" element={<AdministrationPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </RoleProvider>
+        </DataGate>
+      </DataSourceProvider>
+    </ErrorBoundary>
   )
 }
 

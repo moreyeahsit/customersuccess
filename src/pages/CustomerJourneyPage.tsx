@@ -25,7 +25,8 @@ function currentStageOf(customer: Customer): JourneyStage {
   if (current) return current.stage
   const completed = customer.journey.filter((e) => e.status === 'complete')
   if (completed.length > 0) return completed[completed.length - 1].stage
-  return customer.journey[0].stage
+  // No journey rows for this customer yet (e.g. added to Excel without a Journey entry) — default to the earliest stage.
+  return customer.journey[0]?.stage ?? STAGES[0]
 }
 
 export function CustomerJourneyPage() {
