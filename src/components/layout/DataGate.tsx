@@ -34,7 +34,7 @@ const FEATURES = [
 function SplitShell({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen w-full bg-slate-50">
-      <div className="relative hidden w-[42%] flex-col justify-between overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-navy-950 p-12 text-white lg:flex">
+      <div className="relative hidden w-[42%] flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-700 via-slate-600 to-slate-900 p-12 text-white lg:flex">
         <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-white/5" />
         <div className="absolute -bottom-32 -left-16 h-80 w-80 rounded-full bg-white/5" />
 
@@ -79,7 +79,7 @@ function SplitShell({ children }: { children: ReactNode }) {
 function MobileBrand() {
   return (
     <div className="mb-6 flex items-center justify-center gap-2 lg:hidden">
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white">
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-500 text-white">
         <Sparkles className="h-4.5 w-4.5" />
       </div>
       <div className="text-left leading-tight">
@@ -117,7 +117,7 @@ function LoadingScreen() {
     <SplitShell>
       <MobileBrand />
       <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
-        <Loader2 className="mb-3 h-8 w-8 animate-spin text-brand-500" />
+        <Loader2 className="mb-3 h-8 w-8 animate-spin text-slate-500" />
         <h1 className="text-xl font-semibold text-slate-800">Loading your data…</h1>
         <p className="mt-2 text-sm text-slate-500">Downloading and reading the workbook from SharePoint. This is usually quick.</p>
       </div>
@@ -139,7 +139,7 @@ function ErrorScreen() {
         <div className="mt-6 flex w-full gap-2">
           <button
             onClick={() => refresh()}
-            className="flex-1 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600"
+            className="flex-1 rounded-lg bg-slate-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-600"
           >
             Try again
           </button>
