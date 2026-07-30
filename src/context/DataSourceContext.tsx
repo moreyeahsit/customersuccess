@@ -31,6 +31,25 @@ export function useDataSource(): DataSourceContextValue {
 }
 
 const AUTO_REFRESH_MS = 5 * 60 * 1000
+const SYNC_TIMEOUT_MS = 25 * 1000
+
+/** Guarantees refresh() always settles — a hung fetch would otherwise leave refreshingRef
+ * stuck forever, silently no-op'ing every future "Sync now" click with no visible error. */
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error(`${label} timed out after ${Math.round(ms / 1000)}s — check your connection and try again.`)), ms)
+    promise.then(
+      (v) => {
+        clearTimeout(timer)
+        resolve(v)
+      },
+      (e) => {
+        clearTimeout(timer)
+        reject(e)
+      },
+    )
+  })
+}
 
 function LocalDataSourceProvider({ children }: { children: ReactNode }) {
   const value: DataSourceContextValue = {
@@ -80,25 +99,31 @@ function LiveDataSourceProvider({ children }: { children: ReactNode }) {
     setStatus('loading')
     setErrorMessage(null)
     try {
-      const account = accounts[0]
-      let token
-      try {
-        token = await instance.acquireTokenSilent({ scopes: GRAPH_SCOPES, account })
-      } catch (err) {
-        if (err instanceof InteractionRequiredAuthError) {
-          // Navigates away — execution picks back up via ensureMsalReady()
-          // processing the redirect response on the next page load.
-          await instance.acquireTokenRedirect({ scopes: GRAPH_SCOPES, account })
-          return
-        }
-        throw err
-      }
-      const buffer = await downloadSharedWorkbook(EXCEL_SHARE_URL!, token.accessToken)
-      const parsed = parseWorkbook(buffer)
-      applyParsedData(parsed)
-      setLastSynced(new Date())
-      setDataVersion((v) => v + 1)
-      setStatus('ready')
+      await withTimeout(
+        (async () => {
+          const account = accounts[0]
+          let token
+          try {
+            token = await instance.acquireTokenSilent({ scopes: GRAPH_SCOPES, account })
+          } catch (err) {
+            if (err instanceof InteractionRequiredAuthError) {
+              // Navigates away — execution picks back up via ensureMsalReady()
+              // processing the redirect response on the next page load.
+              await instance.acquireTokenRedirect({ scopes: GRAPH_SCOPES, account })
+              return
+            }
+            throw err
+          }
+          const buffer = await downloadSharedWorkbook(EXCEL_SHARE_URL!, token.accessToken)
+          const parsed = parseWorkbook(buffer)
+          applyParsedData(parsed)
+          setLastSynced(new Date())
+          setDataVersion((v) => v + 1)
+          setStatus('ready')
+        })(),
+        SYNC_TIMEOUT_MS,
+        'Sync',
+      )
     } catch (err) {
       setStatus('error')
       setErrorMessage(err instanceof Error ? err.message : String(err))
