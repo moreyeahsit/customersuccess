@@ -6,6 +6,7 @@ import { useRole } from '@/context/RoleContext'
 import { useDataSource } from '@/context/DataSourceContext'
 import { ROLES } from '@/types/rbac'
 import { EXCEL_SHARE_URL } from '@/excel/msalConfig'
+import { CUSTOMERS, ALL_TASKS, ALL_TESTIMONIALS } from '@/data/customers'
 
 const PERMISSION_COLUMNS: { key: 'canViewFinancials' | 'canViewAllCustomers' | 'canManageTasks' | 'canManageAdmin'; label: string }[] = [
   { key: 'canViewFinancials', label: 'View Financials' },
@@ -101,6 +102,12 @@ export function AdministrationPage() {
               )}
               {ds.lastSynced && <span>· Last synced {ds.lastSynced.toLocaleString()}</span>}
             </div>
+            <p className="mt-2 text-xs text-slate-500">
+              Currently loaded: <strong className="font-semibold text-slate-700">{CUSTOMERS.length}</strong> customers,{' '}
+              <strong className="font-semibold text-slate-700">{ALL_TASKS.length}</strong> tasks,{' '}
+              <strong className="font-semibold text-slate-700">{ALL_TESTIMONIALS.length}</strong> testimonials — check
+              this number changes after editing the workbook and clicking "Sync now" below.
+            </p>
             {ds.status === 'error' && ds.errorMessage && (
               <p className="mt-2 whitespace-pre-wrap rounded-lg bg-bad-50 p-2 text-xs text-bad-700">{ds.errorMessage}</p>
             )}
