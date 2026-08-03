@@ -123,7 +123,6 @@ export function TasksPage() {
                 <th className="py-2 pr-2">Priority</th>
                 <th className="py-2 pr-2">Status</th>
                 <th className="py-2 pr-2">Due Date</th>
-                <th className="py-2 pr-2">Source</th>
               </tr>
             </thead>
             <tbody>
@@ -155,15 +154,12 @@ export function TasksPage() {
                       <Pill tone={STATUS_TONE[t.status]}>{t.status}</Pill>
                     </td>
                     <td className="py-2.5 pr-2 text-slate-600">{formatDateShort(t.dueDate)}</td>
-                    <td className="py-2.5 pr-2">
-                      <Pill tone={t.source === 'AI' ? 'brand' : 'neutral'}>{t.source}</Pill>
-                    </td>
                   </tr>
                 )
               })}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-6 text-center text-slate-400">
+                  <td colSpan={6} className="py-6 text-center text-slate-400">
                     No tasks match the current filters.
                   </td>
                 </tr>
